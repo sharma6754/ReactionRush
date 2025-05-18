@@ -22,20 +22,51 @@ interface SoundProviderProps {
 export function SoundProvider({ children }: SoundProviderProps): JSX.Element {
   const [isSoundEnabled, setIsSoundEnabled] = useLocalStorage<boolean>("soundEnabled", true);
 
+  // Use a simple beep function instead of external audio files
+  const createBeep = (freq: number, duration: number, volume: number) => {
+    try {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      gainNode.gain.value = volume;
+      oscillator.frequency.value = freq;
+      oscillator.type = 'sine';
+      
+      oscillator.start();
+      
+      setTimeout(() => {
+        oscillator.stop();
+        audioContext.close();
+      }, duration);
+      
+      return true;
+    } catch (err) {
+      console.error("Error playing sound:", err);
+      return false;
+    }
+  };
+
+  // Simplified sound effects
   const sounds = {
-    click: new Audio("https://assets.codepen.io/350/pop.mp3"),
-    countdown: new Audio("https://assets.codepen.io/350/blip.mp3"),
-    success: new Audio("https://assets.codepen.io/350/success.mp3"),
-    error: new Audio("https://assets.codepen.io/350/error.mp3"),
-    achievement: new Audio("https://assets.codepen.io/350/achievement.mp3"),
+    click: () => createBeep(800, 100, 0.2),
+    countdown: () => createBeep(500, 100, 0.2),
+    success: () => createBeep(1200, 300, 0.2),
+    error: () => createBeep(300, 300, 0.2),
+    achievement: () => {
+      createBeep(600, 100, 0.2);
+      setTimeout(() => createBeep(900, 200, 0.2), 150);
+    },
   };
 
   const playSound = (soundType: SoundType) => {
     if (isSoundEnabled) {
-      const sound = sounds[soundType];
-      if (sound) {
-        sound.currentTime = 0;
-        sound.play().catch(err => console.error("Error playing sound:", err));
+      const soundFunction = sounds[soundType];
+      if (soundFunction) {
+        soundFunction();
       }
     }
   };

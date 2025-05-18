@@ -37,10 +37,10 @@ export default function MiniChart({
   return (
     <div className={`mt-4 h-${height} w-full relative ${className}`}>
       <svg width="100%" height="100%" className="chart-container">
-        <rect x="0" y="0" width="100%" height="100%" className="chart-bg" rx="4"></rect>
+        <rect x="0" y="0" width="100%" height="100%" fill="transparent" rx="4"></rect>
         <polyline 
           points={polylinePoints}
-          className="chart-line" 
+          stroke="#6366f1" 
           fill="none" 
           strokeWidth="2"
         />
@@ -50,7 +50,7 @@ export default function MiniChart({
             cx={calculatePoint(point, index).split(",")[0]} 
             cy={calculatePoint(point, index).split(",")[1]}
             r="4" 
-            className="chart-dot"
+            fill="#4f46e5"
           />
         ))}
       </svg>
