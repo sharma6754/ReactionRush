@@ -331,9 +331,11 @@ export function GameProvider({ children }: GameProviderProps): JSX.Element {
       
       // Calculate today's best score
       const today = new Date().setHours(0, 0, 0, 0);
-      const todaysScores = newScores.filter(
-        score => score.date.setHours(0, 0, 0, 0) === today
-      );
+      const todaysScores = newScores.filter(score => {
+        // Ensure we're working with a proper Date object
+        const scoreDate = new Date(score.date);
+        return scoreDate.setHours(0, 0, 0, 0) === today;
+      });
       const todayBest = todaysScores.length > 0
         ? Math.min(...todaysScores.map(s => s.time))
         : null;
