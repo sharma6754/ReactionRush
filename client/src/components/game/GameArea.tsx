@@ -53,7 +53,8 @@ export default function GameArea() {
     }
   };
 
-  // Render the ghost indicator
+  // Render the ghost indicator - this shows a visual marker of your previous best reaction time
+  // to help you compare and try to beat it during the current attempt
   const renderGhostIndicator = () => {
     if (settings.showGhost && gameState === "waiting") {
       return (
@@ -61,6 +62,7 @@ export default function GameArea() {
           <div 
             className="absolute h-full bg-secondary opacity-50 w-1"
             style={{ left: "30%" }}
+            title="Your previous best reaction time"
           ></div>
         </div>
       );

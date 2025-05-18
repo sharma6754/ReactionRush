@@ -23,7 +23,7 @@ export default function Home() {
   const [isChallengeOpen, setIsChallengeOpen] = useState(false);
 
   useEffect(() => {
-    document.title = "Reaction Speed Test";
+    document.title = "Radigo";
   }, []);
 
   return (
@@ -31,7 +31,7 @@ export default function Home() {
       {/* Header */}
       <header className="container mx-auto px-4 py-6 flex justify-between items-center">
         <h1 className="text-2xl md:text-3xl font-display font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          Reaction<span className="text-accent">Test</span>
+          Radigo
         </h1>
         <div className="flex space-x-3">
           <Button

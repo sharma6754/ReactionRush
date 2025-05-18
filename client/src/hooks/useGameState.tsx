@@ -13,6 +13,15 @@ import {
   GameContext as GameContextType,
 } from "@/types";
 
+// Define achievement condition functions separately for better type safety
+const achievementConditions = {
+  speedDemon: (stats: Stats, scores: Score[]) => scores.some(score => score.time < 200),
+  consistent: (stats: Stats, scores: Score[]) => stats.testsCompleted >= 5,
+  champion: (stats: Stats, scores: Score[]) => scores.some(score => score.time < 180),
+  analyst: (stats: Stats, scores: Score[]) => stats.testsCompleted >= 100,
+  bullseye: (stats: Stats, scores: Score[]) => scores.some(score => score.time < 150),
+};
+
 // Default achievements
 const defaultAchievements: Achievement[] = [
   {
@@ -22,7 +31,7 @@ const defaultAchievements: Achievement[] = [
     emoji: "⚡",
     unlocked: false,
     gradient: "from-blue-500 to-indigo-600",
-    condition: (stats, scores) => scores.some(score => score.time < 200),
+    condition: achievementConditions.speedDemon,
   },
   {
     id: "consistent",
@@ -31,7 +40,7 @@ const defaultAchievements: Achievement[] = [
     emoji: "🔄",
     unlocked: false,
     gradient: "from-pink-500 to-purple-600",
-    condition: (stats) => stats.testsCompleted >= 5,
+    condition: achievementConditions.consistent,
   },
   {
     id: "champion",
@@ -40,7 +49,7 @@ const defaultAchievements: Achievement[] = [
     emoji: "🥇",
     unlocked: false,
     gradient: "from-amber-500 to-orange-600",
-    condition: (stats, scores) => scores.some(score => score.time < 180),
+    condition: achievementConditions.champion,
   },
   {
     id: "analyst",
@@ -49,7 +58,7 @@ const defaultAchievements: Achievement[] = [
     emoji: "📊",
     unlocked: false,
     gradient: "from-green-500 to-teal-600",
-    condition: (stats) => stats.testsCompleted >= 100,
+    condition: achievementConditions.analyst,
   },
   {
     id: "bullseye",
@@ -58,7 +67,7 @@ const defaultAchievements: Achievement[] = [
     emoji: "🎯",
     unlocked: false,
     gradient: "from-red-500 to-pink-600",
-    condition: (stats, scores) => scores.some(score => score.time < 150),
+    condition: achievementConditions.bullseye,
   },
 ];
 
@@ -206,27 +215,40 @@ export function GameProvider({ children }: GameProviderProps): JSX.Element {
 
   // Check for achievements
   useEffect(() => {
-    const updatedAchievements = achievements.map(achievement => {
-      if (!achievement.unlocked && achievement.condition(stats, scores)) {
-        // Achievement newly unlocked
-        toast({
-          title: "Achievement Unlocked!",
-          description: `${achievement.name}: ${achievement.description}`,
-          duration: 5000,
-        });
-        playSound("achievement");
-        
-        return {
-          ...achievement,
-          unlocked: true,
-          unlockedAt: new Date(),
-        };
+    try {
+      const updatedAchievements = achievements.map(achievement => {
+        // Check if condition exists and is a function before calling it
+        if (!achievement.unlocked && 
+            achievement.condition && 
+            typeof achievement.condition === 'function') {
+          try {
+            if (achievement.condition(stats, scores)) {
+              // Achievement newly unlocked
+              toast({
+                title: "Achievement Unlocked!",
+                description: `${achievement.name}: ${achievement.description}`,
+                duration: 5000,
+              });
+              playSound("achievement");
+              
+              return {
+                ...achievement,
+                unlocked: true,
+                unlockedAt: new Date(),
+              };
+            }
+          } catch (err) {
+            console.error(`Error checking achievement ${achievement.id}:`, err);
+          }
+        }
+        return achievement;
+      });
+      
+      if (JSON.stringify(updatedAchievements) !== JSON.stringify(achievements)) {
+        setAchievements(updatedAchievements);
       }
-      return achievement;
-    });
-    
-    if (JSON.stringify(updatedAchievements) !== JSON.stringify(achievements)) {
-      setAchievements(updatedAchievements);
+    } catch (err) {
+      console.error("Error processing achievements:", err);
     }
   }, [stats, scores]);
 

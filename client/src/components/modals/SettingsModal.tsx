@@ -126,7 +126,10 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
               <h4 className="font-semibold mb-3">Game Settings</h4>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">Show Ghost Indicator</span>
+                  <div>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Show Ghost Indicator</span>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Shows a visual marker of your previous best time</p>
+                  </div>
                   <Switch
                     checked={showGhost}
                     onCheckedChange={setShowGhost}
