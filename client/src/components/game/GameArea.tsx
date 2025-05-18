@@ -3,6 +3,7 @@ import { useGameState } from "@/hooks/useGameState";
 import { Button } from "@/components/ui/button";
 import Confetti from "@/components/ui/confetti";
 import { useSound } from "@/hooks/useSound";
+import ShareResultModal from "@/components/modals/ShareResultModal";
 
 export default function GameArea() {
   const { 
@@ -18,6 +19,7 @@ export default function GameArea() {
   const { playSound } = useSound();
   const [countdown, setCountdown] = useState(3);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   // Handle countdown timer
   useEffect(() => {
@@ -144,7 +146,10 @@ export default function GameArea() {
             </Button>
             <Button 
               variant="outline"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsShareModalOpen(true);
+              }}
               className="py-2 px-6 bg-white dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-semibold rounded-lg shadow-md hover:shadow-lg transition-all border border-gray-300 dark:border-gray-600"
             >
               Share Result
@@ -180,6 +185,12 @@ export default function GameArea() {
       <Confetti 
         show={showConfetti} 
         onComplete={() => setShowConfetti(false)} 
+      />
+
+      {/* Share Result Modal */}
+      <ShareResultModal
+        isOpen={isShareModalOpen}
+        onClose={() => setIsShareModalOpen(false)}
       />
     </section>
   );

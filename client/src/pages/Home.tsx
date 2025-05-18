@@ -13,6 +13,7 @@ import AchievementsSection from "@/components/game/AchievementsSection";
 import Leaderboard from "@/components/game/Leaderboard";
 import SettingsModal from "@/components/modals/SettingsModal";
 import ChallengeModal from "@/components/modals/ChallengeModal";
+import AnimatedBackground from "@/components/ui/animated-background";
 import { useState } from "react";
 
 export default function Home() {
@@ -27,17 +28,23 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100 min-h-screen transition-colors duration-300">
+    <div className="min-h-screen transition-colors duration-300">
+      <AnimatedBackground />
       {/* Header */}
-      <header className="container mx-auto px-4 py-6 flex justify-between items-center">
-        <h1 className="text-2xl md:text-3xl font-display font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-          Radigo
-        </h1>
-        <div className="flex space-x-3">
+      <header className="container mx-auto px-4 py-6 flex justify-between items-center relative">
+        <div className="absolute left-1/2 transform -translate-x-1/2">
+          <h1 className="text-3xl md:text-5xl font-display font-bold bg-gradient-to-r from-purple-500 to-blue-400 bg-clip-text text-transparent flex items-center gap-2">
+            <span className={`text-4xl md:text-6xl ${isDarkMode ? 'text-white' : 'text-black'}`}>
+              {isDarkMode ? '☠️' : '💀'}
+            </span>
+            <span>Radi<span className="uppercase">GO</span></span>
+          </h1>
+        </div>
+        <div className="flex space-x-3 ml-auto">
           <Button
             variant="outline"
             size="icon"
-            className="p-2 rounded-full bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow"
+            className="p-2 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-md hover:shadow-lg transition-shadow"
             onClick={toggleSound}
           >
             {isSoundEnabled ? (
@@ -49,7 +56,7 @@ export default function Home() {
           <Button
             variant="outline"
             size="icon"
-            className="p-2 rounded-full bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow"
+            className="p-2 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-md hover:shadow-lg transition-shadow"
             onClick={toggleTheme}
           >
             {isDarkMode ? (
@@ -61,7 +68,7 @@ export default function Home() {
           <Button
             variant="outline"
             size="icon"
-            className="p-2 rounded-full bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow"
+            className="p-2 rounded-full bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shadow-md hover:shadow-lg transition-shadow"
             onClick={() => setIsSettingsOpen(true)}
           >
             <Settings className="h-5 w-5" />

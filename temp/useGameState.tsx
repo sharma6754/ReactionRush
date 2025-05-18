@@ -86,7 +86,7 @@ const defaultLeaderboard: LeaderboardEntry[] = [
     id: "current",
     name: "John Doe",
     initials: "JD",
-    bestTime: 189,
+    bestTime: 579,
     date: new Date(2023, 6, 25),
     isCurrentUser: true,
     avatarGradient: "from-primary to-secondary",

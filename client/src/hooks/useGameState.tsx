@@ -15,11 +15,11 @@ import {
 
 // Define achievement condition functions separately for better type safety
 const achievementConditions = {
-  speedDemon: (stats: Stats, scores: Score[]) => scores.some(score => score.time < 200),
+  speedDemon: (stats: Stats, scores: Score[]) => scores.some(score => score.time < 350),
   consistent: (stats: Stats, scores: Score[]) => stats.testsCompleted >= 5,
-  champion: (stats: Stats, scores: Score[]) => scores.some(score => score.time < 180),
+  champion: (stats: Stats, scores: Score[]) => scores.some(score => score.time < 330),
   analyst: (stats: Stats, scores: Score[]) => stats.testsCompleted >= 100,
-  bullseye: (stats: Stats, scores: Score[]) => scores.some(score => score.time < 150),
+  bullseye: (stats: Stats, scores: Score[]) => scores.some(score => score.time < 320),
 };
 
 // Default achievements
@@ -27,7 +27,7 @@ const defaultAchievements: Achievement[] = [
   {
     id: "speed-demon",
     name: "Speed Demon",
-    description: "Under 200ms",
+    description: "Under 350ms",
     emoji: "⚡",
     unlocked: false,
     gradient: "from-blue-500 to-indigo-600",
@@ -45,7 +45,7 @@ const defaultAchievements: Achievement[] = [
   {
     id: "champion",
     name: "Champion",
-    description: "Top leaderboard",
+    description: "Under 330ms",
     emoji: "🥇",
     unlocked: false,
     gradient: "from-amber-500 to-orange-600",
@@ -63,7 +63,7 @@ const defaultAchievements: Achievement[] = [
   {
     id: "bullseye",
     name: "Bullseye",
-    description: "Under 150ms",
+    description: "Under 320ms",
     emoji: "🎯",
     unlocked: false,
     gradient: "from-red-500 to-pink-600",
@@ -75,10 +75,10 @@ const defaultAchievements: Achievement[] = [
 const defaultLeaderboard: LeaderboardEntry[] = [
   {
     id: "user1",
-    name: "Jane Smith",
-    initials: "JS",
-    bestTime: 172,
-    date: new Date(2023, 6, 24),
+    name: "John Doe",
+    initials: "JD",
+    bestTime: 325,
+    date: new Date(2024, 2, 15),
     isCurrentUser: false,
     avatarGradient: "from-green-500 to-emerald-600",
   },
@@ -86,17 +86,17 @@ const defaultLeaderboard: LeaderboardEntry[] = [
     id: "user2",
     name: "Mike Lee",
     initials: "ML",
-    bestTime: 183,
-    date: new Date(2023, 6, 26),
+    bestTime: 342,
+    date: new Date(2024, 2, 14),
     isCurrentUser: false,
     avatarGradient: "from-blue-500 to-cyan-600",
   },
   {
     id: "current",
-    name: "John Doe",
-    initials: "JD",
-    bestTime: 189,
-    date: new Date(2023, 6, 25),
+    name: "Mr. X",
+    initials: "MX",
+    bestTime: 356,
+    date: new Date(2024, 2, 16),
     isCurrentUser: true,
     avatarGradient: "from-primary to-secondary",
   },
@@ -104,8 +104,8 @@ const defaultLeaderboard: LeaderboardEntry[] = [
     id: "user3",
     name: "Alex Patel",
     initials: "AP",
-    bestTime: 195,
-    date: new Date(2023, 6, 22),
+    bestTime: 378,
+    date: new Date(2024, 2, 13),
     isCurrentUser: false,
     avatarGradient: "from-purple-500 to-indigo-600",
   },
@@ -113,8 +113,8 @@ const defaultLeaderboard: LeaderboardEntry[] = [
     id: "user4",
     name: "Sarah Rodriguez",
     initials: "SR",
-    bestTime: 201,
-    date: new Date(2023, 6, 20),
+    bestTime: 395,
+    date: new Date(2024, 2, 12),
     isCurrentUser: false,
     avatarGradient: "from-amber-500 to-orange-600",
   },
@@ -124,34 +124,34 @@ const defaultSettings: Settings = {
   darkMode: false,
   sound: true,
   showGhost: true,
-  username: "John Doe",
+  username: "Mr. X",
 };
 
 const defaultUser: User = {
-  name: "John Doe",
-  initials: "JD",
-  testsCompleted: 20,
+  name: "Mr. X",
+  initials: "MX",
+  testsCompleted: 25,
   rank: 3,
 };
 
 const defaultStats: Stats = {
-  bestScore: 189,
-  bestScoreDate: new Date(2023, 6, 25),
-  average: 246,
-  testsCompleted: 20,
-  todayBest: 203,
-  chartPoints: [247, 203, 226, 210, 189],
+  bestScore: 356,
+  bestScoreDate: new Date(2024, 2, 16),
+  average: 385,
+  testsCompleted: 25,
+  todayBest: 356,
+  chartPoints: [395, 378, 365, 342, 356],
 };
 
 // Generate initial 5 scores
 const generateInitialScores = (): Score[] => {
-  const today = new Date();
+  const baseDate = new Date();
   return [
-    { time: 247, date: new Date(today.setMinutes(today.getMinutes() - 5)) },
-    { time: 203, date: new Date(today.setMinutes(today.getMinutes() - 2)) },
-    { time: 226, date: new Date(today.setMinutes(today.getMinutes() - 3)) },
-    { time: 210, date: new Date(today.setMinutes(today.getMinutes() - 4)) },
-    { time: 189, date: new Date(2023, 6, 25) },
+    { time: 395, date: new Date(baseDate.getTime() - 5 * 60000) },
+    { time: 378, date: new Date(baseDate.getTime() - 4 * 60000) },
+    { time: 365, date: new Date(baseDate.getTime() - 3 * 60000) },
+    { time: 342, date: new Date(baseDate.getTime() - 2 * 60000) },
+    { time: 356, date: new Date(baseDate.getTime() - 1 * 60000) },
   ];
 };
 
@@ -211,18 +211,18 @@ export function GameProvider({ children }: GameProviderProps): JSX.Element {
       const updatedLeaderboard = [...leaderboard, userEntry].sort((a, b) => a.bestTime - b.bestTime);
       setLeaderboard(updatedLeaderboard);
     }
-  }, []);
+  }, [leaderboard, settings.username, stats.bestScore, stats.bestScoreDate]);
 
   // Check for achievements
   useEffect(() => {
     try {
       const updatedAchievements = achievements.map(achievement => {
-        // Check if condition exists and is a function before calling it
         if (!achievement.unlocked && 
             achievement.condition && 
             typeof achievement.condition === 'function') {
           try {
-            if (achievement.condition(stats, scores)) {
+            const shouldUnlock = achievement.condition(stats, scores);
+            if (shouldUnlock) {
               // Achievement newly unlocked
               toast({
                 title: "Achievement Unlocked!",
@@ -250,7 +250,7 @@ export function GameProvider({ children }: GameProviderProps): JSX.Element {
     } catch (err) {
       console.error("Error processing achievements:", err);
     }
-  }, [stats, scores]);
+  }, [stats, scores, achievements, toast, playSound]);
 
   const updateSettings = (newSettings: Partial<Settings>) => {
     const updatedSettings = { ...settings, ...newSettings };
@@ -401,6 +401,10 @@ export function GameProvider({ children }: GameProviderProps): JSX.Element {
   };
 
   const resetGameData = () => {
+    // Clear all localStorage items
+    localStorage.clear();
+    
+    // Reset all state to defaults
     setUser(defaultUser);
     setScores(generateInitialScores());
     setStats(defaultStats);
@@ -408,10 +412,12 @@ export function GameProvider({ children }: GameProviderProps): JSX.Element {
     setLeaderboard(defaultLeaderboard);
     setLastReactionTime(null);
     setIsNewBest(false);
+    setGameState("resting");
+    setSettings(defaultSettings);
     
     toast({
       title: "Data Reset",
-      description: "All game data has been reset.",
+      description: "All game data has been reset to default values.",
     });
   };
 
