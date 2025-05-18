@@ -14,7 +14,7 @@ A modern, interactive reaction time testing game built with React and TypeScript
 
 ## Live Demo
 
-[Play ReactionRush](https://yourusername.github.io/ReactionRush/)
+[Play ReactionRush](https://sharma6754.github.io/ReactionRush/)
 
 ## Getting Started
 
@@ -27,7 +27,7 @@ A modern, interactive reaction time testing game built with React and TypeScript
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/ReactionRush.git
+git clone https://github.com/sharma6754/ReactionRush.git
 cd ReactionRush
 ```
 
